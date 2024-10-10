@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Domain.Bullet;
 
 public class BulletManager : MonoBehaviour
 {
     public static BulletManager Instance { get; private set; }
     public Bullet Prefab;
-    public int PoolSize = 20;
+    public int PoolSize = 100;
     
     private Queue<Bullet> _pool;
 
@@ -28,23 +29,17 @@ public class BulletManager : MonoBehaviour
         _pool = new Queue<Bullet>();
         
         for (int i = 0; i < PoolSize; i++) {
-            Bullet obj = Instantiate(Prefab.gameObject).GetComponent<Bullet>();
-            // obj.SetActive(false); // 비활성화 상태로 유지
-            _pool.Enqueue(obj);
+            Instantiate(Prefab.gameObject);
         }
-    }
-
-    public bool BulletSpawn(Vector3 position, Vector3 direction, float velocity)
-    {
-        return true;
     }
 
     public Bullet GetFromPool() {
         if (_pool.Count > 0) {
             Bullet obj = _pool.Dequeue();
-            // obj.SetActive(true); // 활성화하여 사용
+            obj.gameObject.SetActive(true);
             return obj;
         }
+
         return null;
     }
 
